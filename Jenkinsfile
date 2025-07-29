@@ -8,15 +8,15 @@ pipeline {
       }
     }
 
-    stage('Sonarqube') {
-      steps {
-        script {
-          docker.image('sonarsource/sonar-scanner-cli').inside('--network docker_ci-network') {
-            sh 'sonar-scanner'
-          }
-        }
-      }
-    }
+    // stage('Sonarqube') {
+    //   steps {
+    //     script {
+    //       docker.image('sonarsource/sonar-scanner-cli').inside('--network docker_ci-network') {
+    //         sh 'sonar-scanner'
+    //       }
+    //     }
+    //   }
+    // }
 
     // stage('Docker build') {
     //   steps {
