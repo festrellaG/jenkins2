@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   jenkins:
     build: .
@@ -28,4 +26,4 @@ volumes:
 
 networks:
   ci-network:
-    external: true
+    driver: bridge

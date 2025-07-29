@@ -1,8 +1,8 @@
 pipeline {
-  agent { label 'agente1' }
+  agent any
 
   stages {
-    stage('Vertificar Docker') {
+    stage('Verificar Docker') {
       steps {
         sh 'docker info'
       }
@@ -11,7 +11,7 @@ pipeline {
     stage('Sonarqube') {
       steps {
         script {
-          docker.image('sonarsource/sonar-scanner-cli').inside('--network ci-network') {
+          docker.image('sonarsource/sonar-scanner-cli').inside('--network docker_ci-network') {
             sh 'sonar-scanner'
           }
         }
