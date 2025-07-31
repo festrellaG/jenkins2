@@ -39,103 +39,13 @@ pipeline {
     // }
   }
 
-  post {
-    success {
-      // Teams notification
-      script {
-        def webhook = 'TU_WEBHOOK_URL_DE_TEAMS'
-        def message = [
-          "@type": "MessageCard",
-          "@context": "http://schema.org/extensions",
-          "themeColor": "00FF00",
-          "summary": "Build Success",
-          "sections": [[
-            "activityTitle": "✅ Build Successful",
-            "activitySubtitle": "${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-            "facts": [
-              ["name": "Job", "value": "${env.JOB_NAME}"],
-              ["name": "Build", "value": "${env.BUILD_NUMBER}"],
-              ["name": "Status", "value": "SUCCESS"]
-            ],
-            "markdown": true
-          ]],
-          "potentialAction": [[
-            "@type": "OpenUri",
-            "name": "View Build",
-            "targets": [["os": "default", "uri": "${env.BUILD_URL}"]]
-          ]]
-        ]
-        
-        httpRequest(
-          httpMode: 'POST',
-          contentType: 'APPLICATION_JSON',
-          requestBody: groovy.json.JsonOutput.toJson(message),
-          url: webhook
-        )
-      }
-      
-      // Email notification
-      emailext (
-        subject: "✅ Build Success: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
-        body: """
-        <h2>Build Successful!</h2>
-        <p><strong>Job:</strong> ${env.JOB_NAME}</p>
-        <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
-        <p><strong>Build URL:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-        <p>All tests passed successfully!</p>
-        """,
-        mimeType: 'text/html',
-        to: 'tu-email@outlook.com'
-      )
-    }
+  // post {
+  //   success {
+  //     slackSend(channel: '#tutorial', message: "Todo bien")
+  //   }
 
-    failure {
-      // Teams notification
-      script {
-        def webhook = 'TU_WEBHOOK_URL_DE_TEAMS'
-        def message = [
-          "@type": "MessageCard",
-          "@context": "http://schema.org/extensions",
-          "themeColor": "FF0000",
-          "summary": "Build Failed",
-          "sections": [[
-            "activityTitle": "❌ Build Failed",
-            "activitySubtitle": "${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-            "facts": [
-              ["name": "Job", "value": "${env.JOB_NAME}"],
-              ["name": "Build", "value": "${env.BUILD_NUMBER}"],
-              ["name": "Status", "value": "FAILED"]
-            ],
-            "markdown": true
-          ]],
-          "potentialAction": [[
-            "@type": "OpenUri",
-            "name": "View Build",
-            "targets": [["os": "default", "uri": "${env.BUILD_URL}"]]
-          ]]
-        ]
-        
-        httpRequest(
-          httpMode: 'POST',
-          contentType: 'APPLICATION_JSON',
-          requestBody: groovy.json.JsonOutput.toJson(message),
-          url: webhook
-        )
-      }
-      
-      // Email notification
-      emailext (
-        subject: "❌ Build Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
-        body: """
-        <h2>Build Failed!</h2>
-        <p><strong>Job:</strong> ${env.JOB_NAME}</p>
-        <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
-        <p><strong>Build URL:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-        <p>Please check the logs for details.</p>
-        """,
-        mimeType: 'text/html',
-        to: 'tu-email@outlook.com'
-      )
-    }
-  }
+  //   failure {
+  //     slackSend(channel: '#tutorial', message: "Algo anda mal")
+  //   }
+  // }
 }
